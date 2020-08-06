@@ -1,0 +1,25 @@
+apiVersion: autoscaling/v2beta2 
+kind: HorizontalPodAutoscaler
+metadata:
+  name: cpu-autoscale
+  namespace: labs-dev
+spec:
+  scaleTargetRef:
+    apiVersion: apps.openshift.io/v1  
+    kind: DeploymentConfig 
+    name: feature-my-cool-thing-learning-experience-platform 
+  minReplicas: 1
+  maxReplicas: 5
+  metrics: 
+  - type: Resource
+    resource:
+      name: cpu 
+      target:
+        type: Utilization 
+        averageValue: 10m
+  - type: Resource
+    resource:
+      name: memory 
+      target:
+        type: AverageValue 
+        averageValue: 10Mi
