@@ -1,0 +1,17 @@
+Azure pre-requisites
+https://docs.openshift.com/container-platform/4.4/installing/installing_azure/installing-azure-account.html
+
+Account limits to increase (will need to request via ticket, details in link above):
+vCPU - 40
+Public IP addresses - 3
+Private IP addresses - 7
+
+A domain registered and it's DNS configured with Azure:
+https://docs.microsoft.com/en-us/azure/dns/dns-delegate-domain-azure-dns
+
+Azure account must have following roles for subs:
+User Access Administrator
+
+https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal
+
+A service principle created - details in doc above.

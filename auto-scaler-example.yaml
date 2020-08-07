@@ -9,7 +9,7 @@ spec:
     kind: DeploymentConfig 
     name: feature-my-cool-thing-learning-experience-platform 
   minReplicas: 1
-  maxReplicas: 5
+  maxReplicas: 3
   metrics: 
   - type: Resource
     resource:
@@ -22,4 +22,4 @@ spec:
       name: memory 
       target:
         type: AverageValue 
-        averageValue: 10Mi
+        averageValue: 15Mi
