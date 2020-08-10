@@ -9,17 +9,17 @@ spec:
     kind: DeploymentConfig 
     name: feature-my-cool-thing-learning-experience-platform 
   minReplicas: 1
-  maxReplicas: 3
+  maxReplicas: 2
   metrics: 
   - type: Resource
     resource:
       name: cpu 
       target:
         type: Utilization 
-        averageValue: 10m
+        averageValue: 1000m
   - type: Resource
     resource:
       name: memory 
       target:
         type: AverageValue 
-        averageValue: 15Mi
+        averageValue: 500Mi
