@@ -44,7 +44,7 @@ spec:
              - /bin/bash
              - -c
              - /opt/backup/backup.sh
-             image: registry.redhat.io/rhscl/postgresql-10-rhel7:latest 
+             image: image-registry.openshift-image-registry.svc:5000/labs-staging/backup-runner 
              imagePullPolicy: IfNotPresent
              name: sso-postgresql-backup
              volumeMounts:
