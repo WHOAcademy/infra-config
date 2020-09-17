@@ -1,5 +1,6 @@
 FROM registry.redhat.io/rhscl/postgresql-10-rhel7:latest
 USER root
+COPY files /
 RUN \
   yum update -y && \
   yum install python27-python-pip.noarch openssl -y && \
