@@ -4,4 +4,4 @@ COPY files /
 RUN \
   yum update -y && \
   yum install python27-python-pip.noarch openssl -y && \
-  python /opt/rh/python27/root/usr/lib/python2.7/site-packages/pip install azure-storage-blob
+  python /opt/rh/python27/root/usr/lib/python2.7/site-packages/pip install -r /usr/local/bin/py-requirements.txt
