@@ -1,0 +1,48 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  labels:
+    backup: postgresql
+  name: sso-postgresql-backup
+  namespace: labs-staging
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+     metadata:
+       creationTimestamp: null
+     spec:
+       backoffLimit: 0
+       template:
+         metadata:
+           creationTimestamp: null
+         spec:
+           activeDeadlineSeconds: 300
+           containers:
+           - env:
+             - name: POSTGRESQL_USER
+               value: "sso"
+             - name: POSTGRESQL_DATABASE
+               value: "sso"
+             - name: POSTGRESQL_SVC_HOSTNAME
+               value: "sso-postgresql"
+             - name: PGPASSWORD
+               value: "123456"
+             command:
+             - /bin/bash
+             - -c
+             - /opt/rh/rh-postgresql10/root/usr/bin/pg_dump -U $POSTGRESQL_USER -d $POSTGRESQL_DATABASE -h $POSTGRESQL_SVC_HOSTNAME
+             image: registry.redhat.io/rhscl/postgresql-10-rhel7:latest 
+             imagePullPolicy: IfNotPresent
+             name: sso-postgresql-backup
+             resources:
+               request:
+                 cpu: 100m
+                 memory: 50Mi
+               limits:
+                 cpu: 1
+                 memory: 512Mi
+           restartPolicy: Never
+           serviceAccount: backup
+           serviceAccountName: backup
+  schedule: '*/5 * * * *'
