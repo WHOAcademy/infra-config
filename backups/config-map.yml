@@ -1,0 +1,44 @@
+apiVersion: v1
+data:
+  backup.sh: |
+    #!/bin/bash
+    DATESTAMP=$(date +%d-%m-%Y)
+
+    pg_dump -U $POSTGRESQL_USER -d $POSTGRESQL_DATABASE -h $POSTGRESQL_SVC_HOSTNAME > /tmp/${BACKUP_NAME}.sql
+
+    gzip -N -9 /tmp/${BACKUP_NAME}_${DATESTAMP}.sql
+
+    openssl enc -aes-256-cbc -in /tmp/${BACKUP_NAME}_${DATESTAMP}.sql -out /tmp/${BACKUP_NAME}_${DATESTAMP}.sql.aes256cbc -salt -pass pass:$ENCRYPT_PASSWORD
+
+    pip install -r /opt/backup/py-requirements.txt
+
+    export SOURCE_FILE="/tmp/${BACKUP_NAME}_${DATESTAMP}.sql.aes256cbc"
+
+    python /opt/backup/upload-blob.py
+  create-container.py: |
+    import os
+
+    from azure.storage.blob import ContainerClient
+
+
+    container_client = ContainerClient.from_connection_string(conn_str=os.getenv('STORAGE_CONN_STR'),
+                                                              container_name=os.getenv('STORAGE_CONTAINER_NAME'))
+
+    container_client.create_container()
+  py-requirements.txt: 'azure-storage-blob==12.5.0 # https://pypi.org/project/azure-storage-blob/'
+  upload-blob.py: |
+    import os
+
+    from azure.storage.blob import BlobClient
+
+    source_file=os.getenv('SOURCE_FILE')
+    blob = BlobClient.from_connection_string(conn_str=os.getenv('STORAGE_CONN_STR'),
+                                             container_name=os.getenv('STORAGE_CONTAINER_NAME'),
+                                             blob_name=source_file)
+
+    with open(source_file, "rb") as data:
+        blob.upload_blob(data)
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: backup-scripts

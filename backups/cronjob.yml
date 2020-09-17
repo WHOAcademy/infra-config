@@ -28,10 +28,22 @@ spec:
                value: "sso-postgresql"
              - name: PGPASSWORD
                value: "123456"
+             - name: BACKUP_NAME
+               value: "keycloak-db"
+             - name: STORAGE_CONN_STR
+               valueFrom:
+                 secretKeyRef:
+                   name: azure-storage-account-conn-string 
+                   key: connection_string
+             - name: STORAGE_CONTAINER_NAME
+               valueFrom:
+                 secretKeyRef:
+                   name: azure-storage-container 
+                   key: container_name
              command:
              - /bin/bash
              - -c
-             - /opt/rh/rh-postgresql10/root/usr/bin/pg_dump -U $POSTGRESQL_USER -d $POSTGRESQL_DATABASE -h $POSTGRESQL_SVC_HOSTNAME
+             - /opt/backup/backup.sh
              image: registry.redhat.io/rhscl/postgresql-10-rhel7:latest 
              imagePullPolicy: IfNotPresent
              name: sso-postgresql-backup

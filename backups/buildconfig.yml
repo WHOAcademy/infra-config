@@ -1,0 +1,19 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: backup-container-builder
+spec:
+  completionDeadlineSeconds: 600
+  failedBuildsHistoryLimit: 3
+  source:
+    contextDir: "backups"
+    git:
+      uri: "https://github.com/WHOAcademy/infra-config.git"  
+      ref: master
+  strategy:
+    type: docker
+    dockerStrategy: {}
+  output:
+    to:
+      kind: "ImageStreamTag"
+      name: "backup-runner:latest"
