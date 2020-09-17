@@ -47,6 +47,9 @@ spec:
              image: registry.redhat.io/rhscl/postgresql-10-rhel7:latest 
              imagePullPolicy: IfNotPresent
              name: sso-postgresql-backup
+             volumeMounts:
+             - name: backup-cm
+               mountPath: /opt/backup
              resources:
                request:
                  cpu: 100m
@@ -57,4 +60,8 @@ spec:
            restartPolicy: Never
            serviceAccount: backup
            serviceAccountName: backup
-  schedule: '*/5 * * * *'
+           volumes:
+           - name: backup-cm
+             configmap:
+               name: backup-scripts 
+  schedule: '0 3 * * *'
