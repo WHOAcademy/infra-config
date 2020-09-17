@@ -40,9 +40,13 @@ spec:
                  secretKeyRef:
                    name: azure-storage-container 
                    key: container_name
+             - name: ENCRYPT_PASSWORD
+               valueFrom:
+                 secretKeyRef:
+                   name: backup-encryption
+                   key: password
              command:
              - /bin/bash
-             - -c
              - /opt/backup/backup.sh
              image: image-registry.openshift-image-registry.svc:5000/labs-staging/backup-runner 
              imagePullPolicy: IfNotPresent
@@ -62,6 +66,15 @@ spec:
            serviceAccountName: backup
            volumes:
            - name: backup-cm
-             configmap:
+             configMap:
                name: backup-scripts 
+               items:
+               - key: backup.sh 
+                 path: backup.sh
+               - key: create-container.py
+                 path: create-container.py
+               - key: py-requirements.txt
+                 path: py-requirements.txt
+               - key: upload-blob.py
+                 path: upload-blob.py
   schedule: '0 3 * * *'
