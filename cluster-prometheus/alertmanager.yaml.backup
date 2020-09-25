@@ -1,28 +1,28 @@
 global:
   resolve_timeout: 5m
-  smtp_from: 
-  smtp_hello: apps.who.lxp.academy.who.int 
-  smtp_smarthost: email-smtp.eu-west-1.amazonaws.com:587
-  smtp_auth_username: 
-  smtp_auth_password: 
+  smtp_from: # from address 
+  smtp_hello: # the SMTP HELO sent to mail server 
+  smtp_smarthost: # smtp server
+  smtp_auth_username: # smtp username 
+  smtp_auth_password: # smtp password
   smtp_require_tls: true
-  slack_api_url: 
+  slack_api_url: # url to slack or slack compatible chat tool including token.
 
 receivers:
   - name: default
     email_configs:
-    - to: 
+    - to: # recipient
       send_resolved: true
       require_tls: true
     slack_configs:
-      - channel: 
+      - channel: # channel name
   - name: watchdog
     email_configs:
-    - to: 
+    - to: # recipient
       send_resolved: true
       require_tls: true
     slack_configs:
-      - channel:
+      - channel: # channel name
 route:
   group_by:
     - namespace

@@ -1,16 +1,38 @@
 apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: cluster-monitoring-config
-  namespace: openshift-monitoring
 data:
-  config.yaml: |+
+  config.yaml: |
+    techPreviewUserWorkload:
+      enabled: true
+    prometheusUserWorkload:
+      nodeSelector:
+        node-role.kubernetes.io/infra: ''
+      retention: 7d
+      volumeClaimTemplate:
+        metadata:
+          name: prometheus
+        spec:
+          storageClassName: managed-premium
+          resources:
+            requests:
+              storage: 50Gi
     alertmanagerMain:
       nodeSelector:
         node-role.kubernetes.io/infra: ""
+      volumeClaimTemplate:
+        spec:
+          storageClassName: managed-premium
+          resources:
+            requests:
+              storage: 50Gi
     prometheusK8s:
       nodeSelector:
         node-role.kubernetes.io/infra: ""
+      volumeClaimTemplate:
+        spec:
+          storageClassName: managed-premium
+          resources:
+            requests:
+              storage: 200Gi
     prometheusOperator:
       nodeSelector:
         node-role.kubernetes.io/infra: ""
@@ -29,3 +51,7 @@ data:
     openshiftStateMetrics:
       nodeSelector:
         node-role.kubernetes.io/infra: ""
+kind: ConfigMap
+metadata:
+  name: cluster-monitoring-config
+  namespace: openshift-monitoring

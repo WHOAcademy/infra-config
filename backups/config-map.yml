@@ -9,7 +9,7 @@ data:
 
     gzip -N -9 /tmp/${BACKUP_NAME}.sql
 
-    openssl enc -aes-256-cbc -in /tmp/${BACKUP_NAME}.sql.gz -out /tmp/${BACKUP_NAME}_${DATESTAMP}.sql.gz.aes256cbc -salt -pass pass:$ENCRYPT_PASSWORD
+    7za a /tmp/${BACKUP_NAME}_${DATESTAMP}.sql.gz.7z /tmp/${BACKUP_NAME}.sql.gz -p"${ENCRYPT_PASSWORD}" 
 
     export SOURCE_FILE="/tmp/${BACKUP_NAME}_${DATESTAMP}.sql.gz.aes256cbc"
 
@@ -24,7 +24,6 @@ data:
                                                               container_name=os.getenv('STORAGE_CONTAINER_NAME'))
 
     container_client.create_container()
-  py-requirements.txt: 'azure-storage-blob==12.5.0 # https://pypi.org/project/azure-storage-blob/'
   upload-blob.py: |
     import os
 
