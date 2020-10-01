@@ -1,0 +1,24 @@
+# config.yaml
+---
+replicaCount: 2
+image:
+  repository: quay.io/prometheusmsteams/prometheus-msteams
+  tag: v1.4.1
+
+connectors:
+# in alertmanager, this will be used as http://prometheus-msteams:2000/alerts
+- alerts: https://outlook.office.com/webhook/xxxx/xxxx 
+
+# extraEnvs is useful for adding extra environment variables such as proxy settings
+container:
+  additionalArgs:
+    - -debug
+
+# Enable metrics for prometheus operator
+metrics:
+  serviceMonitor:
+    enabled: true
+    additionalLabels:
+      release: prometheus # change this accordingly
+      msteams: proxy
+    scrapeInterval: 30s
